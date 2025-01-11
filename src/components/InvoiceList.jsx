@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { IoEyeSharp } from "react-icons/io5";
+import { MdModeEdit } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
+import { IoMdDownload } from "react-icons/io";
 
 export default function InvoiceList() {
   const [invoices, setInvoices] = useState([]);
@@ -38,7 +42,7 @@ export default function InvoiceList() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-100">Invoices</h1>
         <Link href="/invoices/new">
-          <div className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors">
+          <div className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
             Create New Invoice
           </div>
         </Link>
@@ -74,27 +78,19 @@ export default function InvoiceList() {
                   {new Date(invoice.date).toLocaleDateString()}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-gray-300">₹{invoice.totalAmount}</td>
-                <td className="px-6 py-4 whitespace-nowrap space-x-4">
+                <td className="flex items-center px-6 py-4 whitespace-nowrap space-x-4">
                   <Link href={`/invoices/${invoice._id}`}>
-                    <div className="inline-block text-purple-400 hover:text-purple-300 transition-colors">
-                      View
-                    </div>
+                    <IoEyeSharp className="inline-block cursor-pointer text-blue-400 hover:text-blue-300 transition-colors text-xl"/>
                   </Link>
                   <Link href={`/invoices/edit/${invoice._id}`}>
-                    <div className="inline-block text-yellow-400 hover:text-yellow-300 transition-colors">
-                      Edit
-                    </div>
+                    <MdModeEdit className="inline-block cursor-pointer text-yellow-400 hover:text-yellow-300 transition-colors text-xl"/>
                   </Link>
-                  <button
+                  <MdDelete
                     onClick={() => handleDelete(invoice._id)}
-                    className="text-red-400 hover:text-red-300 transition-colors"
-                  >
-                    Delete
-                  </button>
+                    className="text-red-400 hover:text-red-300 transition-colors text-xl cursor-pointer"
+                  />
                   <Link href={`/api/invoices/pdf/${invoice._id}`}>
-                    <div className="inline-block text-green-400 hover:text-green-300 transition-colors">
-                      Download PDF
-                    </div>
+                    <IoMdDownload className="inline-block text-green-400 cursor-pointer text-xl hover:text-green-300 transition-colors"/>
                   </Link>
                 </td>
               </tr>
