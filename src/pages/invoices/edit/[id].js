@@ -36,7 +36,7 @@ export default function EditInvoicePage() {
     return (
       <Layout>
         <div className="flex justify-center items-center h-64">
-          <div className="text-xl text-gray-600">Loading...</div>
+          <div className="text-xl text-gray-400">Loading...</div>
         </div>
       </Layout>
     );
@@ -46,11 +46,11 @@ export default function EditInvoicePage() {
     return (
       <Layout>
         <div className="max-w-6xl mx-auto p-6">
-          <div className="bg-red-50 border border-red-200 rounded-md p-4">
-            <div className="text-red-700">Error: {error}</div>
+          <div className="bg-red-900/20 border border-red-700 rounded-lg p-4">
+            <div className="text-red-400">Error: {error}</div>
             <button
               onClick={() => router.push('/invoices')}
-              className="mt-2 text-red-600 hover:text-red-800"
+              className="mt-2 text-red-400 hover:text-red-300 transition-colors"
             >
               Return to Invoices
             </button>
@@ -64,10 +64,12 @@ export default function EditInvoicePage() {
     <Layout>
       <div className="max-w-6xl mx-auto p-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Edit Invoice #{invoice.invoiceNumber}</h1>
+          <h1 className="text-2xl font-bold text-gray-100">
+            Edit Invoice #{invoice.invoiceNumber}
+          </h1>
           <button
             onClick={() => router.push('/invoices')}
-            className="px-4 py-2 text-gray-600 hover:text-gray-800"
+            className="px-4 py-2 text-gray-400 hover:text-gray-300 transition-colors"
           >
             Cancel
           </button>
