@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import RequiredInput from './RequiredInput';
+import { toast } from 'sonner';
 
 export default function InvoiceForm({ initialData }) {
   const router = useRouter();
@@ -62,6 +63,7 @@ export default function InvoiceForm({ initialData }) {
       });
 
       if (response.ok) {
+        toast.success(initialData ? 'Invoice updated successfully' : 'Invoice created successfully');
         router.push('/invoices');
       }
     } catch (error) {

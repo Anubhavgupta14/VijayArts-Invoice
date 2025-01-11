@@ -25,6 +25,11 @@ const InvoiceSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  status: {
+    type: String,
+    required: true,
+    default: 'Yet to send'
+  },
   createdAt: {
     type: Date,
     default: Date.now

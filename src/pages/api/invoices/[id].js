@@ -20,7 +20,13 @@ export default async function handler(req, res) {
 
     case 'PUT':
       try {
-        const invoice = await Invoice.findByIdAndUpdate(id, req.body, {
+        const updateData = req.body;
+        // Validate status if it's being updated
+        if (updateData.status && !['Paid', 'Pending', 'Yet to send'].includes(updateData.status)) {
+          return res.status(400).json({ success: false, error: 'Invalid status' });
+        }
+
+        const invoice = await Invoice.findByIdAndUpdate(id, updateData, {
           new: true,
           runValidators: true,
         });
@@ -29,7 +35,7 @@ export default async function handler(req, res) {
         }
         res.status(200).json(invoice);
       } catch (error) {
-        res.status(400).json({ success: false });
+        res.status(400).json({ success: false, error: error.message });
       }
       break;
 

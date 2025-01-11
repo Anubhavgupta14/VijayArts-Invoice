@@ -3,10 +3,12 @@ import Link from 'next/link';
 import { IoEyeSharp } from "react-icons/io5";
 import { MdModeEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
+import { Toaster, toast } from 'sonner'
 import { IoMdDownload } from "react-icons/io";
 
 export default function InvoiceList() {
   const [invoices, setInvoices] = useState([]);
+  const statusOptions = ['Paid', 'Pending', 'Yet to send'];
 
   useEffect(() => {
     fetchInvoices();
@@ -30,10 +32,30 @@ export default function InvoiceList() {
         });
         if (response.ok) {
           fetchInvoices();
+          toast.success('Invoice deleted successfully');
         }
       } catch (error) {
         console.error('Error deleting invoice:', error);
       }
+    }
+  };
+
+  const handleStatusChange = async (id, newStatus) => {
+    try {
+      const response = await fetch(`/api/invoices/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      
+      if (response.ok) {
+        toast.success('Status updated successfully');
+        fetchInvoices();
+      }
+    } catch (error) {
+      console.error('Error updating status:', error);
     }
   };
 
@@ -62,6 +84,9 @@ export default function InvoiceList() {
                 Date
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                Status
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Total Amount
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
@@ -76,6 +101,17 @@ export default function InvoiceList() {
                 <td className="px-6 py-4 whitespace-nowrap text-gray-300">{invoice.customerName}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-gray-300">
                   {new Date(invoice.date).toLocaleDateString()}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <select
+                    value={invoice.status}
+                    onChange={(e) => handleStatusChange(invoice._id, e.target.value)}
+                    className="bg-gray-700 text-gray-300 rounded px-2 py-1 text-sm"
+                  >
+                    {statusOptions.map((status) => (
+                      <option key={status} value={status}>{status}</option>
+                    ))}
+                  </select>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-gray-300">₹{invoice.totalAmount}</td>
                 <td className="flex items-center px-6 py-4 whitespace-nowrap space-x-4">

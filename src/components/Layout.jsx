@@ -20,7 +20,7 @@ export default function Layout({ children }) {
           <div className="flex justify-between items-center h-20">
             {/* Logo Section */}
             <div className="flex items-center">
-              <Link href="/">
+              <Link href="/invoices">
                 <div className="flex-shrink-0 flex items-center cursor-pointer">
                   <Image src="/logo.png" alt="Vijay Arts" width={170} height={80} className="relative bottom-2 rounded-lg" />
                 </div>
