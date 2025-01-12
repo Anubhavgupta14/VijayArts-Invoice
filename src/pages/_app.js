@@ -5,7 +5,7 @@ export default function App({ Component, pageProps }) {
   return (
   <>
   <Toaster />
-    <Component {...pageProps} />;
+    <Component {...pageProps} />
   </>
   )
 }
