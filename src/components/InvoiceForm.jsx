@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 
 export default function InvoiceForm({ initialData }) {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(initialData || {
     invoiceNumber: '',
     customerName: '',
@@ -49,6 +50,7 @@ export default function InvoiceForm({ initialData }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     
     const url = initialData ? `/api/invoices/${initialData._id}` : '/api/invoices';
     const method = initialData ? 'PUT' : 'POST';
@@ -68,6 +70,9 @@ export default function InvoiceForm({ initialData }) {
       }
     } catch (error) {
       console.error('Error saving invoice:', error);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -150,7 +155,7 @@ export default function InvoiceForm({ initialData }) {
             type="submit"
             className="px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
           >
-            {initialData ? 'Update Invoice' : 'Create Invoice'}
+            {initialData ? !loading ? 'Update Invoice' : "Processing..." : !loading ? 'Create Invoice' : "Processing..."}
           </button>
         </div>
       </div>

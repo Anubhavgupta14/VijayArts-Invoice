@@ -5,6 +5,8 @@ import { IoEyeSharp } from "react-icons/io5";
 import { MdModeEdit, MdDelete } from "react-icons/md";
 import { IoMdDownload } from "react-icons/io";
 import { Toaster, toast } from "sonner";
+import DeletePopup from "./DeletePopup";
+import { set } from "mongoose";
 
 const TableSkeleton = () => (
   <tbody className="bg-gray-800 divide-y divide-gray-700">
@@ -42,6 +44,8 @@ export default function InvoiceList() {
   const [invoices, setInvoices] = useState([]);
   const statusOptions = ["Paid", "Pending", "Yet to send"];
   const [loading, setLoading] = useState(true);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deletePopup, setDeletePopup] = useState({ isOpen: false, invoiceId: null });
 
   useEffect(() => {
     fetchInvoices();
@@ -64,21 +68,23 @@ export default function InvoiceList() {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this invoice?")) {
-      try {
-        const response = await fetch(`/api/invoices/${id}`, {
-          method: "DELETE",
-        });
-        if (response.ok) {
-          toast.success("Invoice deleted successfully");
-          fetchInvoices();
-        } else {
-          throw new Error('Failed to delete invoice');
-        }
-      } catch (error) {
-        console.error("Error deleting invoice:", error);
-        toast.error("Failed to delete invoice");
+    setDeleteLoading(true);
+    try {
+      const response = await fetch(`/api/invoices/${id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        toast.success("Invoice deleted successfully");
+        fetchInvoices();
+      } else {
+        throw new Error('Failed to delete invoice');
       }
+    } catch (error) {
+      console.error("Error deleting invoice:", error);
+      toast.error("Failed to delete invoice");
+    } finally {
+      setDeletePopup({ isOpen: false, invoiceId: null });
+      setDeleteLoading(false);
     }
   };
 
@@ -197,7 +203,7 @@ export default function InvoiceList() {
                           />
                         </Link>
                         <MdDelete
-                          onClick={() => handleDelete(invoice._id)}
+                          onClick={() => setDeletePopup({ isOpen: true, invoiceId: invoice._id })}
                           className="text-red-400 hover:text-red-300 transition-colors text-xl cursor-pointer"
                           title="Delete"
                         />
@@ -216,6 +222,13 @@ export default function InvoiceList() {
           </table>
         </div>
       </div>
+      
+      <DeletePopup
+        isOpen={deletePopup.isOpen}
+        deleteLoading={deleteLoading}
+        onClose={() => setDeletePopup({ isOpen: false, invoiceId: null })}
+        onConfirm={() => handleDelete(deletePopup.invoiceId)}
+      />
     </>
   );
 }
