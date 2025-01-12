@@ -3,9 +3,16 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
+import Cookies from "js-cookie";
 
 export default function Layout({ children }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const logout = async () => {
+    Cookies.remove("token");
+    window.location.href = "/auth";
+  }
+
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
@@ -29,6 +36,9 @@ export default function Layout({ children }) {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-4">
+                <div onClick={logout} className="px-4 cursor-pointer py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700 transition-all duration-200 ease-in-out font-medium">
+                  Logout
+                </div>
               <Link href="/invoices">
                 <div className="px-4 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700 transition-all duration-200 ease-in-out font-medium">
                   Invoices

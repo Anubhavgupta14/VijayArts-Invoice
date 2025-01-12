@@ -20,9 +20,12 @@ import { LockKeyhole, Mail } from "lucide-react";
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await fetch("/api/auth", {
         method: "POST",
@@ -43,6 +46,9 @@ export default function Home() {
       console.log(data);
     } catch (error) {
       console.log(error);
+    }
+    finally{
+        setLoading(false);
     }
   };
 
@@ -101,7 +107,7 @@ export default function Home() {
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
               <Button type="submit" className="w-full">
-                Sign in
+                {!loading ? "Sign in" : "Processing..."}
               </Button>
             </CardFooter>
           </form>
